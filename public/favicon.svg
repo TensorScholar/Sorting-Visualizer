@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Sorting Algorithm Visualization Platform Icon</title>
+    <defs>
+        <!-- Linear gradient for background -->
+        <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1E293B" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#0F172A" stop-opacity="1"/>
+        </linearGradient>
+        
+        <!-- Linear gradients for bars -->
+        <linearGradient id="barGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#3B82F6" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#2563EB" stop-opacity="1"/>
+        </linearGradient>
+        
+        <linearGradient id="barGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#EC4899" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#DB2777" stop-opacity="1"/>
+        </linearGradient>
+        
+        <linearGradient id="barGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#10B981" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#059669" stop-opacity="1"/>
+        </linearGradient>
+        
+        <linearGradient id="barGradient4" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#F59E0B" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#D97706" stop-opacity="1"/>
+        </linearGradient>
+        
+        <linearGradient id="barGradient5" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#8B5CF6" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#7C3AED" stop-opacity="1"/>
+        </linearGradient>
+        
+        <!-- Box shadow filter for depth effect -->
+        <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.25"/>
+        </filter>
+        
+        <!-- Highlight effect -->
+        <filter id="highlight" x="-10%" y="-10%" width="120%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+            <feComposite in="blur" in2="SourceAlpha" operator="out" result="highlight"/>
+            <feFlood flood-color="#FFFFFF" flood-opacity="0.3" result="color"/>
+            <feComposite in="color" in2="highlight" operator="in" result="glow"/>
+            <feComposite in="glow" in2="SourceGraphic" operator="over"/>
+        </filter>
+    </defs>
+    
+    <!-- Background rounded square -->
+    <rect x="32" y="32" width="448" height="448" rx="80" fill="url(#backgroundGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Sorting bars visualization -->
+    <!-- Each bar represents a different height in a sorting visualization -->
+    <g id="sortingBars" transform="translate(96, 96)">
+        <!-- First bar (already sorted) -->
+        <rect x="0" y="220" width="40" height="100" rx="4" fill="url(#barGradient1)" filter="url(#highlight)"/>
+        
+        <!-- Second bar (already sorted) -->
+        <rect x="64" y="180" width="40" height="140" rx="4" fill="url(#barGradient2)" filter="url(#highlight)"/>
+        
+        <!-- Third bar (being compared/swapped - highlighted) -->
+        <rect x="128" y="100" width="40" height="220" rx="4" fill="url(#barGradient3)" filter="url(#highlight)">
+            <!-- Animation for the active element -->
+            <animate attributeName="y" values="100;90;100" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        
+        <!-- Fourth bar (being compared/swapped - highlighted) -->
+        <rect x="192" y="260" width="40" height="60" rx="4" fill="url(#barGradient4)" filter="url(#highlight)">
+            <!-- Animation for the active element -->
+            <animate attributeName="y" values="260;250;260" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+        </rect>
+        
+        <!-- Fifth bar (unsorted) -->
+        <rect x="256" y="140" width="40" height="180" rx="4" fill="url(#barGradient5)"/>
+    </g>
+    
+    <!-- Small details to represent algorithmic complexity notation -->
+    <g id="algorithmicNotation" fill="#FFFFFF" font-family="monospace" font-size="16" font-weight="bold" opacity="0.7" transform="translate(96, 380)">
+        <text x="0" y="0">O(n log n)</text>
+    </g>
+    
+    <!-- Metadata -->
+    <metadata>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                 xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Description about="https://example.com">
+                <dc:title>Sorting Algorithm Visualization Platform Icon</dc:title>
+                <dc:creator>Algorithm Visualization Team</dc:creator>
+                <dc:description>Icon representing a sorting algorithm visualization with colorful bars</dc:description>
+            </rdf:Description>
+        </rdf:RDF>
+    </metadata>
+</svg>

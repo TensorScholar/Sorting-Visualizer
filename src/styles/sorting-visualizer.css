@@ -1,0 +1,872 @@
+/* src/styles/sorting-visualizer.css
+ * 
+ * Comprehensive stylesheet for the Advanced Sorting Algorithm Visualization Platform
+ * 
+ * This stylesheet implements a modular, responsive design system for algorithm visualization
+ * with particular attention to visual hierarchy, interaction feedback, and animation fluidity.
+ * The design employs CSS custom properties for theming consistency and implements
+ * a comprehensive set of visual states for algorithm operations.
+ *
+ * Performance considerations:
+ * - Hardware-accelerated animations via transform/opacity properties
+ * - Efficient selector specificity to minimize cascade resolution time
+ * - Contained animations to prevent layout thrashing
+ * - Debounced transitions to reduce rendering load during rapid state changes
+ *
+ * Accessibility features:
+ * - Sufficient contrast ratios for all text elements (WCAG AA compliance)
+ * - Focus styles for keyboard navigation
+ * - Appropriate ARIA attributes supported through class-based styling
+ * - Motion reduction media query support
+ */
+
+/* ======================================================================
+   1. CSS Custom Properties (Theming Variables)
+   ====================================================================== */
+
+:root {
+  /* Color Palette - Based on a scientific visualization-oriented theme */
+  --color-bg-primary: #f8f9fa;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #1e1e2e;
+  --color-bg-canvas: #1e1e2e;
+  --color-bg-control: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-active: #e2e8f0;
+  --color-bg-highlight: rgba(74, 107, 223, 0.1);
+  
+  /* Text Colors */
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #ffffff;
+  --color-text-accent: #3b82f6;
+  --color-text-success: #10b981;
+  --color-text-warning: #f59e0b;
+  --color-text-error: #ef4444;
+  
+  /* Border Colors */
+  --color-border-light: #e2e8f0;
+  --color-border-medium: #cbd5e1;
+  --color-border-heavy: #94a3b8;
+  
+  /* Algorithm State Colors */
+  --color-comparing: #ef4444;        /* Red for comparisons */
+  --color-swapping: #f59e0b;         /* Orange for swaps */
+  --color-reading: #3b82f6;          /* Blue for reads */
+  --color-writing: #8b5cf6;          /* Purple for writes */
+  --color-sorted: #10b981;           /* Green for sorted elements */
+  --color-selected: #f59e0b;         /* Orange for selected elements */
+  --color-pivot: #8b5cf6;            /* Purple for pivot elements */
+
+  /* Accent Colors for Various Algorithm Types */
+  --color-comparison-accent: #3b82f6;   /* Blue for comparison-based algorithms */
+  --color-distribution-accent: #8b5cf6; /* Purple for distribution algorithms */
+  --color-network-accent: #ef4444;      /* Red for network algorithms */
+  --color-special-accent: #f59e0b;      /* Orange for special algorithms */
+  --color-selection-accent: #14b8a6;    /* Teal for selection algorithms */
+  
+  /* Spacing Scale (rem-based for scalability) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Component Dimensions */
+  --header-height: 4rem;
+  --control-panel-width: 18rem;
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  
+  /* Typography */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'Fira Code', 'Roboto Mono', 'Courier New', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Z-index Scale */
+  --z-index-controls: 10;
+  --z-index-overlay: 20;
+  --z-index-modal: 30;
+  --z-index-tooltip: 40;
+}
+
+/* ======================================================================
+   2. Global Styles & Resets
+   ====================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ======================================================================
+   3. Main Container
+   ====================================================================== */
+
+.sorting-visualizer {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  margin: var(--space-6) auto;
+  max-width: 1200px;
+  height: calc(100vh - 2 * var(--space-6));
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* ======================================================================
+   4. Visualization Canvas Container
+   ====================================================================== */
+
+.visualization-container {
+  position: relative;
+  flex: 1;
+  min-height: 400px;
+  margin-bottom: var(--space-6);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.visualization-canvas {
+  display: block;
+  background-color: var(--color-bg-canvas);
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* Prevent browser handling of touch gestures */
+}
+
+.visualization-canvas.fallback {
+  display: none; /* Hidden by default, shown only when WebGL fails */
+}
+
+.algorithm-info {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-index-controls);
+  max-width: 300px;
+  transition: opacity var(--transition-normal);
+}
+
+.algorithm-info h3 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.complexity-info {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--font-size-xs);
+  opacity: 0.9;
+}
+
+/* ======================================================================
+   5. Specialized Visualization Components
+   ====================================================================== */
+
+/* Heap Visualization */
+.heap-view-container {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-index-controls);
+  max-width: 50%;
+  max-height: 50%;
+  overflow: auto;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.heap-view-container h4 {
+  color: var(--color-text-inverse);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.heap-canvas {
+  border-radius: var(--border-radius-sm);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Distribution Visualization */
+.distribution-view {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-index-controls);
+  max-width: 50%;
+  max-height: 50%;
+  overflow: auto;
+  box-shadow: var(--shadow-md);
+}
+
+/* Selection Visualization */
+.selection-view {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-index-controls);
+  max-width: 50%;
+  max-height: 50%;
+  overflow: auto;
+  box-shadow: var(--shadow-md);
+}
+
+/* Transform Visualization */
+.transform-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4);
+  backdrop-filter: blur(8px);
+  z-index: var(--z-index-overlay);
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ======================================================================
+   6. Controls Container
+   ====================================================================== */
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  min-height: 200px;
+  overflow: auto;
+}
+
+/* ======================================================================
+   7. Playback Controls
+   ====================================================================== */
+
+.playback-controls {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.playback-controls button {
+  flex: 1;
+  background-color: var(--color-text-accent);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.playback-controls button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-text-accent) 90%, black);
+}
+
+.playback-controls button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.playback-controls button:focus {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+.playback-controls button:disabled {
+  background-color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ======================================================================
+   8. Speed Control
+   ====================================================================== */
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.speed-control label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  min-width: 60px;
+  color: var(--color-text-secondary);
+}
+
+.speed-control input[type="range"] {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-border-light);
+  border-radius: 3px;
+  outline: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--color-text-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.speed-control input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--color-text-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.speed-control input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+  background-color: color-mix(in srgb, var(--color-text-accent) 90%, black);
+}
+
+.speed-control input[type="range"]:hover::-moz-range-thumb {
+  transform: scale(1.1);
+  background-color: color-mix(in srgb, var(--color-text-accent) 90%, black);
+}
+
+.speed-control input[type="range"]:focus {
+  outline: none;
+}
+
+.speed-control input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.speed-control input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.speed-control input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.speed-control span {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  min-width: 40px;
+  text-align: right;
+  color: var(--color-text-secondary);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ======================================================================
+   9. Progress Indicator
+   ====================================================================== */
+
+.progress-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.step-counter {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: right;
+  color: var(--color-text-secondary);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+progress {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  background: var(--color-border-light);
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background: var(--color-border-light);
+  border-radius: 4px;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--color-text-accent) 0%, color-mix(in srgb, var(--color-text-accent) 70%, purple) 100%);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--color-text-accent) 0%, color-mix(in srgb, var(--color-text-accent) 70%, purple) 100%);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+/* ======================================================================
+   10. Data Controls
+   ====================================================================== */
+
+.data-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  align-items: end;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.control-group label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.data-controls select,
+.data-controls button {
+  height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.data-controls select {
+  border: 1px solid var(--color-border-medium);
+  background-color: var(--color-bg-control);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234c5563' d='M6 8.825c-.2 0-.4-.1-.5-.2l-3.5-3.5c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0L6 6.925l2.9-2.9c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.5 3.5c-.1.1-.3.2-.5.2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-4) center;
+  padding-right: var(--space-12);
+}
+
+.data-controls select:focus,
+.data-controls button:focus {
+  outline: none;
+  border-color: var(--color-text-accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.data-controls select:hover {
+  border-color: var(--color-text-accent);
+}
+
+.data-controls select:disabled,
+.data-controls button:disabled {
+  background-color: var(--color-border-light);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  border-color: var(--color-border-light);
+}
+
+.data-controls button {
+  background-color: var(--color-text-accent);
+  color: var(--color-text-inverse);
+  border: none;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.data-controls button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-text-accent) 90%, black);
+}
+
+.data-controls button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* ======================================================================
+   11. Metrics Panel
+   ====================================================================== */
+
+.metrics-panel {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
+}
+
+.metrics-panel h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-4);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metric label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.metric span {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ======================================================================
+   12. Step Information
+   ====================================================================== */
+
+.step-info {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
+  margin-top: var(--space-4);
+}
+
+.step-info h4 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.step-message {
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--color-bg-highlight);
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--color-text-accent);
+}
+
+.step-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ======================================================================
+   13. Algorithm Comparison
+   ====================================================================== */
+
+.algorithm-comparison-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.comparison-algorithm {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
+}
+
+.comparison-algorithm h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.comparison-data {
+  padding: var(--space-3);
+  background-color: var(--color-bg-highlight);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--space-3);
+}
+
+/* ======================================================================
+   14. Animations
+   ====================================================================== */
+
+@keyframes highlightBar {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(1.1); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes compareHighlight {
+  0% { background-color: rgba(239, 68, 68, 0.7); }
+  100% { background-color: rgba(239, 68, 68, 0); }
+}
+
+@keyframes swapAnimation {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(var(--swap-distance, 20px)); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes sortedHighlight {
+  0% { background-color: rgba(16, 185, 129, 0.7); }
+  100% { background-color: rgba(16, 185, 129, 0.2); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Animation classes */
+.highlight-animation {
+  animation: highlightBar 0.5s ease;
+}
+
+.compare-animation {
+  animation: compareHighlight 0.5s ease;
+}
+
+.swap-animation {
+  animation: swapAnimation 0.5s ease;
+}
+
+.sorted-animation {
+  animation: sortedHighlight 0.5s ease;
+  animation-fill-mode: forwards;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.slide-in {
+  animation: slideInRight 0.3s ease;
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* For users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .highlight-animation,
+  .compare-animation,
+  .swap-animation,
+  .sorted-animation,
+  .fade-in,
+  .slide-in,
+  .pulse {
+    animation: none;
+    transition: none;
+  }
+  
+  * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* ======================================================================
+   15. Responsive Design
+   ====================================================================== */
+
+/* Medium screens */
+@media (max-width: 992px) {
+  .sorting-visualizer {
+    padding: var(--space-4);
+    margin: var(--space-4) auto;
+    height: calc(100vh - 2 * var(--space-4));
+  }
+  
+  .visualization-container {
+    min-height: 300px;
+  }
+  
+  .data-controls {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+  .sorting-visualizer {
+    padding: var(--space-3);
+    margin: var(--space-3);
+    height: auto;
+    min-height: calc(100vh - 2 * var(--space-3));
+  }
+  
+  .playback-controls {
+    flex-wrap: wrap;
+  }
+  
+  .playback-controls button {
+    flex: 1 0 calc(33.33% - var(--space-2));
+    padding: var(--space-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .data-controls {
+    grid-template-columns: 1fr;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .algorithm-comparison-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .heap-view-container,
+  .distribution-view,
+  .selection-view {
+    max-width: 90%;
+    max-height: 30%;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .sorting-visualizer {
+    padding: var(--space-2);
+    margin: var(--space-2);
+  }
+  
+  .visualization-container {
+    min-height: 200px;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .playback-controls button {
+    flex: 1 0 calc(50% - var(--space-2));
+  }
+  
+  .speed-control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .speed-control input[type="range"] {
+    width: 100%;
+  }
+}

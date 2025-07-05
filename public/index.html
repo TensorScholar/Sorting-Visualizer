@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Advanced Sorting Algorithm Visualization Platform</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Advanced Sorting Algorithm Visualization Platform">
+    <meta name="description" content="A comprehensive educational tool for visualizing and understanding sorting algorithms through interactive demonstrations, performance analysis, and algorithmic insights.">
+    <meta name="keywords" content="sorting algorithms, algorithm visualization, computer science, educational tool, data structures">
+    <meta name="author" content="Algorithm Visualization Team">
+    
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorting-visualizer.example.com/">
+    <meta property="og:title" content="Advanced Sorting Algorithm Visualization Platform">
+    <meta property="og:description" content="A comprehensive educational tool for visualizing and understanding sorting algorithms through interactive demonstrations, performance analysis, and algorithmic insights.">
+    <meta property="og:image" content="%PUBLIC_URL%/opengraph-preview.png">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Advanced Sorting Algorithm Visualization Platform">
+    <meta name="twitter:description" content="A comprehensive educational tool for visualizing and understanding sorting algorithms through interactive demonstrations, performance analysis, and algorithmic insights.">
+    <meta name="twitter:image" content="%PUBLIC_URL%/twitter-preview.png">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any"> <!-- Legacy favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg"> <!-- SVG favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
+    <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    
+    <!-- Preconnect to critical domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Primary font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Secondary font for monospace elements (JetBrains Mono) -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS inlined for performance -->
+    <style>
+        /* Initial loading state and critical rendering styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #1e293b;
+            background-color: #f8fafc;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        code, pre, .code {
+            font-family: 'JetBrains Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+        
+        #root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 0.25rem solid rgba(59, 130, 246, 0.2);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-message {
+            max-width: 500px;
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .no-script {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .no-script h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .no-script p {
+            margin-bottom: 1rem;
+        }
+    </style>
+    
+    <!-- Preload key resources -->
+    <link rel="preload" href="%PUBLIC_URL%/static/js/main.js" as="script">
+    <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style">
+</head>
+<body>
+    <!-- Application root container -->
+    <div id="root">
+        <!-- Loading spinner shown while React initializes -->
+        <div class="loading-container" aria-live="polite">
+            <div class="loading-spinner" role="status" aria-label="Loading application"></div>
+            <div class="loading-title">Loading Algorithm Visualization Platform</div>
+            <p class="loading-message">Initializing visualization components and algorithm implementations. This should only take a moment...</p>
+        </div>
+    </div>
+    
+    <!-- No JavaScript fallback -->
+    <noscript>
+        <div class="no-script">
+            <h1>JavaScript is Required</h1>
+            <p>The Advanced Sorting Algorithm Visualization Platform requires JavaScript to visualize sorting algorithms and provide an interactive learning experience.</p>
+            <p>Please enable JavaScript in your browser settings and reload the page to continue.</p>
+            <p>If you're unable to enable JavaScript, you might be interested in our static resources about sorting algorithms at 
+                <a href="https://sorting-algorithms.example.com/resources">sorting-algorithms.example.com/resources</a>.
+            </p>
+        </div>
+    </noscript>
+    
+    <!-- Application entry point script (injected by build process) -->
+    <!-- The build process will insert the bundled JavaScript here -->
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Core Server Dependencies
+Flask==2.2.5  # Last 2.x version with broad compatibility
+Flask-Cors==4.0.0
+Werkzeug==2.2.3  # Compatible with Flask 2.2.5
+
+# Data Analysis and Processing
+numpy>=1.26.0  # Prebuilt wheels available for Python 3.12
+pandas>=2.0.0  # Compatible with numpy 1.26+
+
+# Serialization and Communication
+PyYAML==6.0.1
+requests==2.31.0
+
+# Testing Framework (Optional)
+pytest>=7.0.0

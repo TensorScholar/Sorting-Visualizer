@@ -1,0 +1,122 @@
+/**
+ * Advanced Sorting Algorithm Visualization Platform
+ * App Component Stylesheet
+ * 
+ * This stylesheet defines the visual appearance of the main application
+ * component, establishing the layout structure and visual hierarchy.
+ */
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header styles */
+.App-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 20px;
+}
+
+.App-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+/* Control elements */
+.controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.control-group select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: white;
+  font-size: 14px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.control-group select:hover {
+  border-color: #94a3b8;
+}
+
+.control-group select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+/* Main content area */
+main {
+  flex: 1;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Footer styles */
+footer {
+  margin-top: auto;
+  padding: 16px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  border-top: 1px solid #e2e8f0;
+}
+
+footer .separator {
+  margin: 0 8px;
+}
+
+footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+footer a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .App {
+    padding: 16px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .App-header h1 {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,236 @@
+# Advanced Sorting Algorithm Visualization Platform .gitignore
+# Comprehensive configuration for JavaScript and Python development
+
+#---------------------------------
+# Node.js / JavaScript
+#---------------------------------
+
+# Build artifacts
+/build
+/dist
+/.next
+*.tsbuildinfo
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Testing
+/coverage
+/.nyc_output
+/cypress/videos
+/cypress/screenshots
+/.jest-cache
+
+# Development environment
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+.env
+
+# Bundle analysis
+/analyze/stats.json
+/analyze/report.html
+bundle-stats.json
+
+#---------------------------------
+# Python
+#---------------------------------
+
+# Compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.so
+
+# Distribution / packaging
+/venv
+/env
+/.venv
+/.env
+/ENV
+/.python-version
+/.tox
+/eggs
+/.eggs
+/*.egg-info
+/dist
+/build
+/sdist
+/wheelhouse
+/wheels
+/develop-eggs
+/downloads
+/.installed.cfg
+/MANIFEST
+
+# Python testing
+.coverage
+htmlcov/
+.hypothesis/
+.tox/
+nosetests.xml
+coverage.xml
+*,cover
+.pytest_cache/
+
+# Python virtual environments
+/venv
+/env
+/.venv
+/.env
+/ENV
+
+#---------------------------------
+# IDE specific files
+#---------------------------------
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+!.vscode/tasks.json.example
+!.vscode/launch.json.example
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+*.iws
+.idea_modules/
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+#---------------------------------
+# OS specific files
+#---------------------------------
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+#---------------------------------
+# Project specific files
+#---------------------------------
+
+# Generated data
+/data/generated
+/public/data
+
+# Bridge communication files
+/python/bridge/temp
+/python/bridge/*.json
+
+# Temporary visualization outputs
+/src/visualization/outputs
+/visualization-exports
+
+# Performance profiles
+*.cpu
+*.memory
+/profiles
+*.heapsnapshot
+
+# Documentation build
+/docs/build
+/site
+
+# Miscellaneous
+*.log
+*.bak
+*.tmp
+.tmp/
+.temp/
+temp/
+tmp/
+.cache/
+*.cache
+logs/
+debug/
+*.debug
+
+# Local configuration overrides
+.localrc
+docker-compose.override.yml
+webpack.config.local.js
+
+# Generated types
+/src/types/generated/
+
+# Specific large test fixtures
+/tests/fixtures/large-datasets/
+/tests/fixtures/performance/
+
+# Exclude potential sensitive data
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
