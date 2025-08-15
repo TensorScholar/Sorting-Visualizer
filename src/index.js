@@ -7,21 +7,13 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-// Import global stylesheets (index.css internally imports normalize.css)
+import ReactDOM from 'react-dom/client';
+import App from './App';
 import './styles/index.css';
 
-// Import main application component
-import App from './App';
-
-/**
- * Render the root application component within a StrictMode wrapper
- * to highlight potential problems in development
- */
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
